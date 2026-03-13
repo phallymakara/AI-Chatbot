@@ -1,0 +1,25 @@
+# Core API
+fastapi
+uvicorn
+python-multipart
+
+# Configuration & Security
+python-dotenv
+azure-identity
+pydantic
+
+# LLM & Tokenization
+openai
+tiktoken
+
+# Document loading & splitting
+pdfplumber               
+pypdf                    
+python-docx
+langchain-text-splitters
+
+# Vector database / Search
+azure-search-documents
+
+# Document storage
+azure-storage-blob

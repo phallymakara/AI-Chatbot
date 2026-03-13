@@ -1,0 +1,27 @@
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+
+
+def chunk_text(text: str, chunk_size: int = 500, chunk_overlap: int = 100):
+    """
+    Split text into semantic chunks for RAG systems.
+
+    Parameters:
+    - text: the full document text
+    - chunk_size: max characters per chunk
+    - chunk_overlap: overlap between chunks to preserve context
+    """
+
+    splitter = RecursiveCharacterTextSplitter(
+        chunk_size=chunk_size,
+        chunk_overlap=chunk_overlap,
+        separators=[
+            "\n\n",   # paragraph
+            "\n",     # line
+            ". ",     # sentence
+            " "       # word
+        ],
+    )
+
+    chunks = splitter.split_text(text)
+
+    return chunks
