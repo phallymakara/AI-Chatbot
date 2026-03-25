@@ -1,14 +1,15 @@
 import os
 import logging
-from dotenv import load_dotenv
+from dotenv import load_dotenv, find_dotenv
 from openai import AzureOpenAI
 
 # Environment configuration for Azure OpenAI
-load_dotenv()
+# find_dotenv() will search up the directory tree for the nearest .env file
+load_dotenv(find_dotenv(), override=True)
 
 # Retrieve service endpoint and deployment details
 endpoint = os.getenv("AZURE_OPENAI_ENDPOINT")
-api_key = os.getenv("AZURE_OPENAI_KEY")
+api_key = os.getenv("AZURE_OPENAI_API_KEY")
 deployment_name = os.getenv("AZURE_OPENAI_EMBEDDING_DEPLOYMENT")
 api_version = os.getenv("AZURE_OPENAI_API_VERSION", "2023-05-15")
 

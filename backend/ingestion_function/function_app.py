@@ -2,7 +2,7 @@ import azure.functions as func
 import logging
 import os
 import re
-from dotenv import load_dotenv
+from dotenv import load_dotenv, find_dotenv
 
 # External dependencies and custom modules
 from ingestion.parser import extract_text_from_blob
@@ -10,7 +10,8 @@ from ingestion.embed_pipeline import generate_embeddings
 from services.search_service import upload_documents
 
 # Environment configuration
-load_dotenv()
+# find_dotenv() will search up the directory tree for the nearest .env file
+load_dotenv(find_dotenv(), override=True)
 
 app = func.FunctionApp()
 

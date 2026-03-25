@@ -1,11 +1,11 @@
 import os
 import logging
-from dotenv import load_dotenv
+from dotenv import load_dotenv, find_dotenv
 from azure.search.documents import SearchClient
 from azure.core.credentials import AzureKeyCredential
 
 # Environment configuration and Azure AI Search client initialization
-load_dotenv()
+load_dotenv(find_dotenv(), override=True)
 
 endpoint = os.getenv("AZURE_SEARCH_ENDPOINT")
 key = os.getenv("AZURE_SEARCH_KEY")
