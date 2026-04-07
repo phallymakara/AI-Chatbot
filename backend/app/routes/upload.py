@@ -22,12 +22,12 @@ class LinkUploadRequest(BaseModel):
     url: str
 
 @router.post("/link")
-async def upload_link(request: LinkUploadRequest, background_tasks: BackgroundTasks, user: dict = Depends(require_admin)):
+async def upload_link(request: LinkUploadRequest, background_tasks: BackgroundTasks):
     """
     Ingests a website URL by scraping its content and processing it.
-    Requires admin privileges.
+    Anonymous access enabled.
     """
-    tenant_id = user.get("tid")
+    tenant_id = "default"
 
     try:
         # Process the URL immediately, or optionally move to a background task
@@ -46,13 +46,12 @@ async def upload_link(request: LinkUploadRequest, background_tasks: BackgroundTa
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/upload")
-async def upload_document(file: UploadFile, user: dict = Depends(require_admin)):
+async def upload_document(file: UploadFile):
     """
     Uploads a file to Azure Blob Storage. 
-    The Azure Function will pick it up automatically for ingestion.
-    Requires admin privileges.
+    Anonymous access enabled.
     """
-    tenant_id = user.get("tid")
+    tenant_id = "default"
 
     try:
         # Transmit the UploadFile stream directly to the blob storage service
@@ -68,20 +67,20 @@ async def upload_document(file: UploadFile, user: dict = Depends(require_admin))
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("")
-async def get_documents(user: dict = Depends(require_admin)):
+async def get_documents():
     """Retrieves a list of all documents uploaded to Azure Blob Storage for the current tenant.
-    Requires admin privileges.
+    Anonymous access enabled.
     """
-    tenant_id = user.get("tid")
+    tenant_id = "default"
     documents = list_documents(tenant_id)
     return {"documents": documents}
 
 @router.delete("/{filename}")
-async def remove_document(filename: str, user: dict = Depends(require_admin)):
+async def remove_document(filename: str):
     """Deletes a document from Azure Blob Storage and its corresponding chunks from Azure AI Search.
-    Requires admin privileges.
+    Anonymous access enabled.
     """
-    tenant_id = user.get("tid")
+    tenant_id = "default"
 
     try:
         # Purge the source file from the Azure Blob Storage container

@@ -1,16 +1,14 @@
 import { useAdminStore } from "@/lib/adminStore";
 import { useState } from "react";
-import { useMsal } from "@azure/msal-react";
-import { loginRequest } from "@/authConfig";
 
 const ADMIN_API_URL = import.meta.env.VITE_ADMIN_API_URL || "http://127.0.0.1:8000/documents";
 
 /**
  * Custom hook for admin operations
  * Reusable logic for document management and metrics
+ * Anonymous access enabled.
  */
 export function useAdmin() {
-  const { instance } = useMsal();
   const { 
     documents, 
     metrics, 
@@ -35,25 +33,8 @@ export function useAdmin() {
     formData.append("file", file);
 
     try {
-      let token: string | undefined;
-      try {
-        const account = instance.getActiveAccount();
-        if (account) {
-          const response = await instance.acquireTokenSilent({
-            ...loginRequest,
-            account,
-          });
-          token = response.idToken;
-        }
-      } catch (tokenErr) {
-        console.warn("Silent token acquisition failed", tokenErr);
-      }
-
       const response = await fetch(`${ADMIN_API_URL}/upload`, {
         method: "POST",
-        headers: {
-          ...(token && { Authorization: `Bearer ${token}` }),
-        },
         body: formData,
       });
 
@@ -92,25 +73,10 @@ export function useAdmin() {
     setAdminError(null);
 
     try {
-      let token: string | undefined;
-      try {
-        const account = instance.getActiveAccount();
-        if (account) {
-          const response = await instance.acquireTokenSilent({
-            ...loginRequest,
-            account,
-          });
-          token = response.idToken;
-        }
-      } catch (tokenErr) {
-        console.warn("Silent token acquisition failed", tokenErr);
-      }
-
       const response = await fetch(`${ADMIN_API_URL}/link`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          ...(token && { Authorization: `Bearer ${token}` }),
         },
         body: JSON.stringify({ name, url }),
       });
@@ -145,26 +111,9 @@ export function useAdmin() {
     setAdminError(null);
 
     try {
-      let token: string | undefined;
-      try {
-        const account = instance.getActiveAccount();
-        if (account) {
-          const response = await instance.acquireTokenSilent({
-            ...loginRequest,
-            account,
-          });
-          token = response.idToken;
-        }
-      } catch (tokenErr) {
-        console.warn("Silent token acquisition failed", tokenErr);
-      }
-
       // For links, we still call the same delete endpoint using the display name (used in IDs)
       const response = await fetch(`${ADMIN_API_URL}/${encodeURIComponent(filename)}`, {
         method: "DELETE",
-        headers: {
-          ...(token && { Authorization: `Bearer ${token}` }),
-        },
       });
 
       if (!response.ok) {

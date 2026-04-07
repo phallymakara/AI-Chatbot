@@ -16,12 +16,12 @@ class ChatRequest(BaseModel):
 
 
 @router.post("/chat")
-async def chat(request: ChatRequest, user: dict = Depends(get_current_user)):
+async def chat(request: ChatRequest):
     """Handles chat requests by performing vector search and streaming the LLM response.
-    Includes multi-tenant filtering based on the authenticated user's tenant ID.
+    Anonymous access enabled.
     """
     question = request.question
-    tenant_id = user.get("tid")
+    tenant_id = "default"
 
     # Convert user query into a semantic vector embedding
     question_vector = await create_embedding(question)

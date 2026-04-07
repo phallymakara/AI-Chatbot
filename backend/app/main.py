@@ -19,8 +19,8 @@ app.add_middleware(
     allow_headers=["*"],  # Permit all standard HTTP headers
 )
 
-app.include_router(chat_router, dependencies=[Depends(get_current_user)])
-app.include_router(upload_router, dependencies=[Depends(get_current_user)])
+app.include_router(chat_router)
+app.include_router(upload_router)
 
 @app.get("/")
 def health_check():
@@ -28,8 +28,8 @@ def health_check():
     return {"status": "HR Chatbot API running"}
 
 @app.get("/api/test")
-async def test_api(user=Depends(get_current_user)):
+async def test_api():
     return {
-        "message": "Secure API working",
-        "user": user
+        "message": "Public API working",
+        "user": "anonymous"
     }

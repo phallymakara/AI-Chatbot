@@ -1,11 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 import { useChatStore } from "@/lib/store";
 import { askLLMStream, type Message } from "@/lib/openai";
-import { useMsal } from "@azure/msal-react";
-import { loginRequest } from "@/authConfig";
 
 export function useChat() {
-  const { instance } = useMsal();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -58,23 +55,6 @@ export function useChat() {
       addMessage(convId, assistantMessage);
 
       // ======================
-      // TOKEN ACQUISITION
-      // ======================
-      let token: string | undefined;
-      try {
-        const account = instance.getActiveAccount();
-        if (account) {
-          const response = await instance.acquireTokenSilent({
-            ...loginRequest,
-            account,
-          });
-          token = response.idToken;
-        }
-      } catch (err) {
-        console.warn("Silent token acquisition failed", err);
-      }
-
-      // ======================
       // STREAM RESPONSE
       // ======================
       let streamedText = "";
@@ -88,7 +68,6 @@ export function useChat() {
         (sources) => {
           updateLastMessage(convId, { sources });
         },
-        token,
       );
     } catch (err) {
       console.error("Chat error:", err);

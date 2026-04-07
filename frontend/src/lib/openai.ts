@@ -35,7 +35,6 @@ export async function askLLMStream(
   messages: Message[],
   onToken: (text: string) => void,
   onSources?: (sources: Source[]) => void,
-  accessToken?: string,
 ): Promise<void> {
   const lastUserMessage = messages[messages.length - 1]?.content;
 
@@ -43,7 +42,6 @@ export async function askLLMStream(
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
     },
     body: JSON.stringify({
       question: lastUserMessage,
