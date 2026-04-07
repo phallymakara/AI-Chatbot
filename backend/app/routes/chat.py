@@ -1,9 +1,12 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
+import json
 
 from app.services.embedding_service import create_embedding
 from app.services.search_service import search_documents
-from app.services.openai_service import ask_llm
+from app.services.openai_service import ask_llm_stream
+from app.middleware.auth import get_current_user
 
 router = APIRouter()
 
@@ -13,17 +16,20 @@ class ChatRequest(BaseModel):
 
 
 @router.post("/chat")
-async def chat(request: ChatRequest):
-
+async def chat(request: ChatRequest, user: dict = Depends(get_current_user)):
+    """Handles chat requests by performing vector search and streaming the LLM response.
+    Includes multi-tenant filtering based on the authenticated user's tenant ID.
+    """
     question = request.question
+    tenant_id = user.get("tid")
 
-    # Step 1 — Generate embedding for user question
-    question_vector = create_embedding(question)
+    # Convert user query into a semantic vector embedding
+    question_vector = await create_embedding(question)
 
-    # Step 2 — Search relevant documents in Azure AI Search
-    documents, sources = search_documents(question_vector, question)
+    # Retrieve semantically relevant document chunks filtered by tenant_id
+    documents, sources = search_documents(question_vector, question, tenant_id=tenant_id)
 
-    # Step 3 — Build context from retrieved chunks
+    # Aggregate retrieved chunks into a cohesive context block for the LLM
     context = "\n\n".join(documents)
 
     prompt = f"""
@@ -40,12 +46,21 @@ Question:
 If the answer is not in the documents, say you do not know.
 """
 
-    # Step 4 — Ask GPT
-    answer = ask_llm(prompt)
+    async def stream():
+        """Internal generator for streaming LLM tokens and appending metadata at the end."""
+        # Yield LLM-generated tokens as they become available
+        async for token in ask_llm_stream(prompt):
+            yield token
 
-    return {
-        "question": question,
-        "answer": answer,
-        "sources": sources,
-        "documents_used": len(documents)
-    }
+        # Append source citations and grounding metadata at the end of the stream
+        meta = {
+            "sources": sources,
+            "documents_used": len(documents)
+        }
+
+        yield f"\n\n__META__{json.dumps(meta)}"
+
+    return StreamingResponse(
+        stream(),
+        media_type="text/plain"
+    )
