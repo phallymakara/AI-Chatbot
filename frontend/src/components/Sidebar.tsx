@@ -243,6 +243,7 @@ export function Sidebar({
                         </button>
                       </form>
                     : <>
+<<<<<<< HEAD
                         <div className="flex-1 min-w-0 overflow-hidden">
                           <span className="block truncate select-none text-[13px]">
                             {conversation.title}
@@ -252,6 +253,17 @@ export function Sidebar({
                           <button
                             className={cn(
                               "p-1 rounded hover:bg-black/5 dark:hover:bg-white/10 transition-all",
+=======
+                        <div className="flex-1 min-w-0 overflow-hidden pr-2">
+                          <span className="block truncate select-none text-[13px] leading-tight">
+                            {conversation.title}
+                          </span>
+                        </div>
+                        <div className="flex shrink-0 items-center gap-0.5 ml-auto">
+                          <button
+                            className={cn(
+                              "p-1 rounded hover:bg-black/5 dark:hover:bg-white/10 transition-all shrink-0",
+>>>>>>> origin/main
                               activeConversationId === conversation.id ?
                                 "opacity-100"
                               : "opacity-0 group-hover:opacity-100",

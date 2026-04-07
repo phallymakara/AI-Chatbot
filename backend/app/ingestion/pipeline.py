@@ -47,8 +47,12 @@ async def process_document(file_path: str, tenant_id: str):
             "content": item["text"],
             "embedding": item["embedding"],
             "source": base_filename,
+<<<<<<< HEAD
             "page": item["page"] or 1,
             "tenant_id": tenant_id
+=======
+            "page": item["page"] or 1
+>>>>>>> origin/main
         })
 
     # Synchronize processed documents with the Azure AI Search index
@@ -95,8 +99,12 @@ async def process_url(url: str, title: str, tenant_id: str = "tenantA"):
             "content": item["text"],
             "embedding": item["embedding"],
             "source": source_identifier,
+<<<<<<< HEAD
             "page": item["page"] or 1,
             "tenant_id": tenant_id
+=======
+            "page": item["page"] or 1
+>>>>>>> origin/main
         })
 
     # Synchronize processed documents with the Azure AI Search index

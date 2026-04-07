@@ -55,6 +55,14 @@ export function useChat() {
       addMessage(convId, assistantMessage);
 
       // ======================
+<<<<<<< HEAD
+=======
+      // TOKEN BYPASS FOR TESTING
+      // ======================
+      const token = "mock-token";
+
+      // ======================
+>>>>>>> origin/main
       // STREAM RESPONSE
       // ======================
       let streamedText = "";
@@ -68,6 +76,10 @@ export function useChat() {
         (sources) => {
           updateLastMessage(convId, { sources });
         },
+<<<<<<< HEAD
+=======
+        token,
+>>>>>>> origin/main
       );
     } catch (err) {
       console.error("Chat error:", err);

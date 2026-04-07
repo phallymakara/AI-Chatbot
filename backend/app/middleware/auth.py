@@ -94,6 +94,7 @@ def verify_token(token):
 
 def get_current_user(request: Request, token: HTTPAuthorizationCredentials = Depends(security)):
     """
+<<<<<<< HEAD
     Dependency that extracts and verifies the bearer token.
     Works across multiple tenants by dynamically selecting the correct JWKS.
     """
@@ -133,4 +134,28 @@ def require_admin(user: dict = Depends(get_current_user)):
             status_code=403, 
             detail="Access denied: Administrative privileges required."
         )
+=======
+    BYPASS AUTHENTICATION FOR TESTING.
+    Returns a mock user instead of verifying the token.
+    """
+    user_info = {
+        "sub": "mock-user-id",
+        "email": "test@example.com",
+        "tid": "mock-tenant-id",
+        "roles": ["SystemAdmin", "TenantAdmin"]
+    }
+    
+    print("\n" + "="*50)
+    print("🔓 AUTHENTICATION BYPASSED (TEST MODE)")
+    print(f"USER:   {user_info['email']}")
+    print("="*50 + "\n")
+    
+    return user_info
+
+def require_admin(user: dict = Depends(get_current_user)):
+    """
+    BYPASS ADMIN CHECK FOR TESTING.
+    Always returns the user.
+    """
+>>>>>>> origin/main
     return user

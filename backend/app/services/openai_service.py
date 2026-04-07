@@ -28,7 +28,18 @@ async def ask_llm_stream(prompt: str):
         messages=[
             {
                 "role": "system",
-                "content": "You are an HR assistant. Answer questions based only on the provided HR policy documents."
+                "content": (
+                    "You are a helpful assistant. You must answer the user's question "
+                    "using ONLY the provided context and documents. Do not use your "
+                    "internal knowledge to supplement your response. If the information "
+                    "is not explicitly stated in the context, you must state that you "
+                    "do not have that information.\n\n"
+                    "LANGUAGE INSTRUCTIONS:\n"
+                    "1. Detect the language of the user's question (e.g., Khmer or English).\n"
+                    "2. Always respond in the SAME language as the user's question.\n"
+                    "3. If the answer is found in the documents (regardless of the document's language), "
+                    "translate it accurately into the user's language for the response."
+                )
             },
             {
                 "role": "user",

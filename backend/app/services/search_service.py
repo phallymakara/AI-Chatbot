@@ -97,7 +97,12 @@ def search_documents(vector, query_text, tenant_id=None, top_k=3):
     vector_query = VectorizedQuery(vector=vector, k_nearest_neighbors=top_k, fields="embedding")
 
     # Add tenant filtering if provided AND enabled in config
+<<<<<<< HEAD
     enable_filter = os.getenv("ENABLE_TENANT_FILTERING", "false").lower() == "true"
+=======
+    # DISABLED: tenant_id field does not exist in the current Azure AI Search index
+    enable_filter = False 
+>>>>>>> origin/main
     filter_expr = f"tenant_id eq '{tenant_id}'" if (tenant_id and enable_filter) else None
 
     results = search_client.search(
