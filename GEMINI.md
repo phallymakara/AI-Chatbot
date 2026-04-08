@@ -2,7 +2,7 @@
 
 This project is a full-stack AI chatbot platform designed with a modular architecture, utilizing Retrieval-Augmented Generation (RAG) to provide answers based on ingested documents.
 
-**Note: Authentication has been removed for simplified anonymous access.**
+**Note: Authentication has been removed for simplified anonymous access. Merge conflicts have been resolved.**
 
 ## Project Overview
 
@@ -11,7 +11,7 @@ This project is a full-stack AI chatbot platform designed with a modular archite
 *   **Ingestion Pipeline:** Azure Functions (Python) that automatically process documents uploaded to Azure Blob Storage, generating embeddings and indexing them in Azure AI Search.
 *   **AI Services:** Azure OpenAI (GPT-4/GPT-3.5) for text generation and embeddings.
 *   **Search Engine:** Azure AI Search for vector and keyword retrieval.
-*   **Authentication:** **REMOVED**. The system currently operates with anonymous access and a default `tenant_id` ("default").
+*   **Authentication:** **REMOVED/BYPASSED**. The system currently operates with anonymous access and a default `tenant_id` ("default").
 
 ## Architecture
 

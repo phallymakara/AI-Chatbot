@@ -2,35 +2,24 @@ from fastapi import APIRouter, Depends
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 import json
+import logging
 
 from app.services.embedding_service import create_embedding
 from app.services.search_service import search_documents
 from app.services.openai_service import ask_llm_stream
-from app.middleware.auth import get_current_user
 
 router = APIRouter()
-
 
 class ChatRequest(BaseModel):
     question: str
 
-
 @router.post("/chat")
-<<<<<<< HEAD
 async def chat(request: ChatRequest):
     """Handles chat requests by performing vector search and streaming the LLM response.
     Anonymous access enabled.
     """
     question = request.question
-    tenant_id = "default"
-=======
-async def chat(request: ChatRequest, user: dict = Depends(get_current_user)):
-    """Handles chat requests by performing vector search and streaming the LLM response.
-    Includes multi-tenant filtering based on the authenticated user's tenant ID.
-    """
-    question = request.question
-    tenant_id = user.get("tid")
->>>>>>> origin/main
+    tenant_id = "default" # Default tenant ID for anonymous access
 
     # Convert user query into a semantic vector embedding
     question_vector = await create_embedding(question)
@@ -38,9 +27,6 @@ async def chat(request: ChatRequest, user: dict = Depends(get_current_user)):
     # Retrieve semantically relevant document chunks filtered by tenant_id
     documents, sources = search_documents(question_vector, question, tenant_id=tenant_id)
 
-<<<<<<< HEAD
-=======
-    import logging
     logging.info(f"Retrieved {len(documents)} chunks from search index for query: '{question}'")
 
     # STRICT CHECK: If no documents were found in the index, do not call the LLM.
@@ -58,7 +44,6 @@ async def chat(request: ChatRequest, user: dict = Depends(get_current_user)):
         
         return StreamingResponse(empty_stream(), media_type="text/plain")
 
->>>>>>> origin/main
     # Aggregate retrieved chunks into a cohesive context block for the LLM
     context = "\n\n".join(documents)
 
@@ -82,11 +67,7 @@ USER QUESTION:
     async def stream():
         """Internal generator for streaming LLM tokens and appending metadata at the end."""
         # Yield LLM-generated tokens as they become available
-<<<<<<< HEAD
-        async for token in ask_llm_stream(prompt):
-=======
         async for token in ask_llm_stream(user_prompt):
->>>>>>> origin/main
             yield token
 
         # Append source citations and grounding metadata at the end of the stream

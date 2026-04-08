@@ -1,10 +1,3 @@
-<<<<<<< HEAD
-# Uncomment to enable Azure Monitor OpenTelemetry
-# Ref: aka.ms/functions-azure-monitor-python 
-# azure-monitor-opentelemetry 
-jsonwebtoken jwks-rsa
-azure-functions
-=======
 # Core dependencies
 azure-functions
 python-dotenv
@@ -19,4 +12,3 @@ jwks-rsa
 # Parsing
 PyPDF2
 python-docx
->>>>>>> origin/main

@@ -94,47 +94,6 @@ def verify_token(token):
 
 def get_current_user(request: Request, token: HTTPAuthorizationCredentials = Depends(security)):
     """
-<<<<<<< HEAD
-    Dependency that extracts and verifies the bearer token.
-    Works across multiple tenants by dynamically selecting the correct JWKS.
-    """
-    token_str = token.credentials
-    try:
-        user = verify_token(token_str)
-        
-        roles = user.get("roles", [])
-        user_info = {
-            "sub": user.get("sub"),
-            "email": user.get("email") or user.get("preferred_username"),
-            "tid": user.get("tid"),
-            "roles": roles
-        }
-        
-        # Log for visibility
-        print("\n" + "="*50)
-        print("🔓 MULTI-TENANT AUTHENTICATED REQUEST")
-        print(f"USER:   {user_info['email']}")
-        print(f"TENANT: {user_info['tid']}")
-        print(f"ROLES:  {roles}")
-        print("="*50 + "\n")
-        
-        return user_info
-    except Exception as e:
-        print(f"\n❌ AUTHENTICATION FAILED: {str(e)}\n")
-        raise HTTPException(status_code=401, detail=f"Invalid token: {str(e)}")
-
-def require_admin(user: dict = Depends(get_current_user)):
-    """
-    Dependency that ensures the user has SystemAdmin or TenantAdmin roles.
-    """
-    user_roles = user.get("roles", [])
-    if not any(role in ["SystemAdmin", "TenantAdmin"] for role in user_roles):
-        logging.warning(f"Access denied for user {user.get('email')}: Missing admin roles. Found: {user_roles}")
-        raise HTTPException(
-            status_code=403, 
-            detail="Access denied: Administrative privileges required."
-        )
-=======
     BYPASS AUTHENTICATION FOR TESTING.
     Returns a mock user instead of verifying the token.
     """
@@ -157,5 +116,4 @@ def require_admin(user: dict = Depends(get_current_user)):
     BYPASS ADMIN CHECK FOR TESTING.
     Always returns the user.
     """
->>>>>>> origin/main
     return user

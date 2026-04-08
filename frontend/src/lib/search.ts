@@ -1,10 +1,6 @@
-<<<<<<< HEAD
-
-=======
 /**
  * Represents a single search result from the web.
  */
->>>>>>> origin/main
 interface SearchResult {
     title: string;
     link: string;
@@ -15,12 +11,9 @@ interface SearchResult {
     position: number;
 }
 
-<<<<<<< HEAD
-=======
 /**
  * The response structure for web search operations.
  */
->>>>>>> origin/main
 export interface SearchResponse {
     results: SearchResult[];
     error?: string;
@@ -28,15 +21,12 @@ export interface SearchResponse {
 
 const SERPAPI_KEY = import.meta.env.VITE_SERPAPI_KEY;
 
-<<<<<<< HEAD
-=======
 /**
  * Performs a web search using the SerpApi (Google Search Engine).
  * 
  * @param query - The search query string.
  * @returns A promise resolving to a SearchResponse object containing results or an error message.
  */
->>>>>>> origin/main
 export async function searchWeb(query: string): Promise<SearchResponse> {
     if (!SERPAPI_KEY) {
         console.warn('VITE_SERPAPI_KEY is missing');

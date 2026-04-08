@@ -1,17 +1,9 @@
 import { useEffect, useState, useCallback } from "react";
-<<<<<<< HEAD
-import { useMsal } from "@azure/msal-react";
-=======
->>>>>>> origin/main
 import { ThemeProvider } from "./components/theme-provider";
 import { Chat } from "./pages/Chat";
 import { Welcome } from "./pages/Welcome";
 import { NotImplemented } from "./pages/NotImplemented";
 import { AdminLayout } from "./pages/admin/AdminLayout";
-<<<<<<< HEAD
-import { loginRequest } from "./authConfig";
-=======
->>>>>>> origin/main
 
 function App() {
   const [currentPath, setCurrentPath] = useState(
@@ -20,11 +12,7 @@ function App() {
 
   const [isReady, setIsReady] = useState(true);
 
-<<<<<<< HEAD
-  // 🔄 Router
-=======
   // Router
->>>>>>> origin/main
   useEffect(() => {
     const handleHashChange = () => {
       setCurrentPath(window.location.hash || "#/welcome");
@@ -34,19 +22,7 @@ function App() {
     return () => window.removeEventListener("hashchange", handleHashChange);
   }, []);
 
-<<<<<<< HEAD
-  const isAdmin = true;
-
-  // ✅ PUBLIC UI
-=======
   // MOCK LOGIN FOR TESTING
-  const account = {
-    username: "test@example.com",
-    name: "Test User",
-    idTokenClaims: {
-      roles: ["SystemAdmin", "TenantAdmin"],
-    },
-  };
   const isAdmin = true;
 
   useEffect(() => {
@@ -83,8 +59,7 @@ function App() {
     return <div>Loading...</div>;
   }
 
-  // LOGGED IN UI (ALWAYS LOGGED IN FOR TESTING)
->>>>>>> origin/main
+  // ✅ PUBLIC UI (ALWAYS LOGGED IN FOR TESTING)
 
   if (currentPath === "#/chat") {
     return (

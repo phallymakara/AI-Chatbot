@@ -2,11 +2,7 @@ import azure.functions as func
 import logging
 import os
 import re
-<<<<<<< HEAD
-from dotenv import load_dotenv
-=======
 from dotenv import load_dotenv, find_dotenv
->>>>>>> origin/main
 
 # External dependencies and custom modules
 from ingestion.parser import extract_text_from_blob
@@ -14,12 +10,8 @@ from ingestion.embed_pipeline import generate_embeddings
 from services.search_service import upload_documents
 
 # Environment configuration
-<<<<<<< HEAD
-load_dotenv()
-=======
 # find_dotenv() will search up the directory tree for the nearest .env file
 load_dotenv(find_dotenv(), override=True)
->>>>>>> origin/main
 
 app = func.FunctionApp()
 
@@ -74,12 +66,8 @@ def blob_ingestion_trigger(myblob: func.InputStream):
                 "content": chunk,
                 "embedding": embeddings[i],
                 "source": base_filename,
-<<<<<<< HEAD
                 "page": 1,
                 "tenant_id": tenant_id
-=======
-                "page": 1
->>>>>>> origin/main
             })
 
         # Batch upload processed documents to the search index

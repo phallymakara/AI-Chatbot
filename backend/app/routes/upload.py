@@ -7,7 +7,7 @@ import logging
 from app.services.blob_service import upload_file_to_blob, delete_document, list_documents
 from app.services.search_service import delete_document_chunks
 from app.ingestion.pipeline import process_url
-from app.middleware.auth import get_current_user, require_admin
+# from app.middleware.auth import get_current_user, require_admin # Removed for anonymous access
 
 # The ingestion logic is delegated to the Azure Blob Trigger function (blob_ingestion_trigger)
 # which automatically processes files upon upload to the cloud storage container.
@@ -22,21 +22,12 @@ class LinkUploadRequest(BaseModel):
     url: str
 
 @router.post("/link")
-<<<<<<< HEAD
 async def upload_link(request: LinkUploadRequest, background_tasks: BackgroundTasks):
     """
     Ingests a website URL by scraping its content and processing it.
     Anonymous access enabled.
     """
     tenant_id = "default"
-=======
-async def upload_link(request: LinkUploadRequest, background_tasks: BackgroundTasks, user: dict = Depends(require_admin)):
-    """
-    Ingests a website URL by scraping its content and processing it.
-    Requires admin privileges.
-    """
-    tenant_id = user.get("tid")
->>>>>>> origin/main
 
     try:
         # Process the URL immediately, or optionally move to a background task
@@ -55,22 +46,12 @@ async def upload_link(request: LinkUploadRequest, background_tasks: BackgroundTa
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/upload")
-<<<<<<< HEAD
 async def upload_document(file: UploadFile):
     """
     Uploads a file to Azure Blob Storage. 
     Anonymous access enabled.
     """
     tenant_id = "default"
-=======
-async def upload_document(file: UploadFile, user: dict = Depends(require_admin)):
-    """
-    Uploads a file to Azure Blob Storage. 
-    The Azure Function will pick it up automatically for ingestion.
-    Requires admin privileges.
-    """
-    tenant_id = user.get("tid")
->>>>>>> origin/main
 
     try:
         # Transmit the UploadFile stream directly to the blob storage service
@@ -86,36 +67,20 @@ async def upload_document(file: UploadFile, user: dict = Depends(require_admin))
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("")
-<<<<<<< HEAD
 async def get_documents():
     """Retrieves a list of all documents uploaded to Azure Blob Storage for the current tenant.
     Anonymous access enabled.
     """
     tenant_id = "default"
-=======
-async def get_documents(user: dict = Depends(require_admin)):
-    """Retrieves a list of all documents uploaded to Azure Blob Storage for the current tenant.
-    Requires admin privileges.
-    """
-    tenant_id = user.get("tid")
->>>>>>> origin/main
     documents = list_documents(tenant_id)
     return {"documents": documents}
 
 @router.delete("/{filename}")
-<<<<<<< HEAD
 async def remove_document(filename: str):
     """Deletes a document from Azure Blob Storage and its corresponding chunks from Azure AI Search.
     Anonymous access enabled.
     """
     tenant_id = "default"
-=======
-async def remove_document(filename: str, user: dict = Depends(require_admin)):
-    """Deletes a document from Azure Blob Storage and its corresponding chunks from Azure AI Search.
-    Requires admin privileges.
-    """
-    tenant_id = user.get("tid")
->>>>>>> origin/main
 
     try:
         # Purge the source file from the Azure Blob Storage container
